@@ -3,7 +3,7 @@
  *  * AUTHOR: Anas Abdelraouf Saeed Ismail
  *
  *  * Project Description :
- * This program reads the raw hexadecimal bytes of an audio file to identify
+ * This program designed to analyze and extract structural metadata from audio files at the binary level and reads the raw hexadecimal bytes of an audio file by using FileInputStream and RandomAccessFile to identify
  * its format (WAV or MP3) and manually parses its header details to be shown in the terminal window then.
  *
  * * HOW TO USE:
