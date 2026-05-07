@@ -1,18 +1,15 @@
 /**
- * ============================================================================
- * Audio Header Analyzer
- * ============================================================================
- * * README:
+ *  * PROJECT: Audio Header Analyzer
+ *  * AUTHOR: Anas Abdelraouf Saeed Ismail
+ *
+ *  * Project Description :
  * This program reads the raw hexadecimal bytes of an audio file to identify
- * its format (WAV or MP3) and manually parses its header details. It completely
- * ignores file extensions (bypassing spoofed files) and strictly avoids using
- * any built-in Java audio libraries or ready-made byte-parsing functions.
+ * its format (WAV or MP3) and manually parses its header details to be shown in the terminal window then.
+ *
  * * HOW TO USE:
  * 1. Compile the program in your terminal: `javac AudioHeaderAnalyzer.java`
  * 2. Run the program: `java AudioHeaderAnalyzer`
  * 3. When prompted, paste the absolute path to your audio file (WAV or MP3).
- * (Note: You can safely paste paths directly from Windows, even with
- * surrounding quote marks "").
  * 4. Review the extracted structural header data printed to the console.
  * 5. Type 'exit' or 'quit' at the prompt to safely close the program.
  * ============================================================================
@@ -28,9 +25,9 @@ import java.util.Scanner;
 public class AudioHeaderAnalyzer {
 
     // Magic Numbers for identification
-    private static final String WAV_RIFF_MARKER = "RIFF";
-    private static final String WAV_WAVE_MARKER = "WAVE";
-    private static final byte[] MP3_ID3_MARKER = {0x49, 0x44, 0x33}; // "ID3"
+    private static final String WAV_RIFF_MARK = "RIFF";
+    private static final String WAV_WAVE_MARK = "WAVE";
+    private static final byte[] MP3_ID3_MARK = {0x49, 0x44, 0x33}; // "ID"
 
     public static void main(String[] args) {
         Scanner terminalInput = new Scanner(System.in);
@@ -54,7 +51,7 @@ public class AudioHeaderAnalyzer {
 
             File targetFile = new File(targetPath);
 
-            // Rule: Handle Errors
+            // Rule: Handling Errors
             if (!targetFile.exists() || !targetFile.isFile()) {
                 System.err.println("[-] ERROR: The specified file does not exist or is invalid.");
                 continue;
@@ -92,13 +89,13 @@ public class AudioHeaderAnalyzer {
         String formatChars = bytesRead >= 12 ? new String(header, 8, 4) : "";
 
         // Check for WAV signature (RIFF + WAVE)
-        if (firstFourChars.equals(WAV_RIFF_MARKER) && formatChars.equals(WAV_WAVE_MARKER)) {
-            System.out.println("\n[+] Identification: Valid Canonical WAV File Detected.");
+        if (firstFourChars.equals(WAV_RIFF_MARK) && formatChars.equals(WAV_WAVE_MARK)) {
+            System.out.println("\n[+] Identification: Valid WAV File Detected.");
             System.out.println("---------------------------------------------------");
             parseCanonicalWavHeader(targetFile, header);
         }
         // Check for MP3 signature (Starts with "ID3")
-        else if (header[0] == MP3_ID3_MARKER[0] && header[1] == MP3_ID3_MARKER[1] && header[2] == MP3_ID3_MARKER[2]) {
+        else if (header[0] == MP3_ID3_MARK[0] && header[1] == MP3_ID3_MARK[1] && header[2] == MP3_ID3_MARK[2]) {
             System.out.println("\n[+] Identification: Valid MP3 File Detected.");
             System.out.println("---------------------------------------------------");
             parseMP3Header(targetFile, header);
@@ -115,10 +112,10 @@ public class AudioHeaderAnalyzer {
     }
 
     /**
-     * Parses the 44-byte Canonical WAVE format exactly as shown in the slide.
+     * Parses the 44-byte WAVE format exactly as shown in the slide.
      */
     private static void parseCanonicalWavHeader(File file, byte[] h) {
-        System.out.println("Reading Canonical WAVE Header...\n");
+        System.out.println("Reading WAVE Header...\n");
 
         System.out.println("ChunkID        : " + new String(h, 0, 4));
         System.out.println("ChunkSize      : " + littleEndianToInt(h, 4) + " bytes");
@@ -169,7 +166,7 @@ public class AudioHeaderAnalyzer {
         }
     }
 
-    // --- Custom Mathematical Extractors (Prohibited to use ready functions) ---
+    // --- Custom Mathematical Extractors
 
     /**
      * Manually scans inside an MP3 file to find the first audio frame and extracts the sample rate.
