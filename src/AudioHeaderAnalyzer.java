@@ -24,7 +24,7 @@ import java.util.Scanner;
 
 public class AudioHeaderAnalyzer {
 
-    // Magic Numbers for identification
+    // Unique Numbers for identification
     private static final String WAV_RIFF_MARK = "RIFF";
     private static final String WAV_WAVE_MARK = "WAVE";
     private static final byte[] MP3_ID3_MARK = {0x49, 0x44, 0x33}; // "ID"
@@ -82,7 +82,7 @@ public class AudioHeaderAnalyzer {
     }
 
     /**
-     * Identifies the file type strictly using magic numbers, ignoring extensions.
+     * Identifies the file type strictly using Unique numbers, ignoring extensions.
      */
     private static void identifyAndParseFormat(File targetFile, byte[] header, int bytesRead) {
         String firstFourChars = new String(header, 0, Math.min(bytesRead, 4));
